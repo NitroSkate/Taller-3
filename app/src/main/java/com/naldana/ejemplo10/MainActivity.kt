@@ -22,6 +22,7 @@ import com.google.gson.Gson
 import com.naldana.ejemplo10.adapters.CurrencyAdapter
 import com.naldana.ejemplo10.data.Database
 import com.naldana.ejemplo10.data.DatabaseContract
+import com.naldana.ejemplo10.pojos.AppConstants
 import com.naldana.ejemplo10.pojos.Currency
 import com.naldana.ejemplo10.utils.NetworkUtils
 import kotlinx.android.synthetic.main.activity_main.*
@@ -40,7 +41,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun changeFragment(id: Int, frag: Fragment){ supportFragmentManager.beginTransaction().replace(id, frag).commit() }
 
     override fun onDestroy() {
-        this.deleteDatabase("miprimerabase.db")
+        //this.deleteDatabase("miprimerabase.db")
         dbHelper.close()
         super.onDestroy()
     }
@@ -295,7 +296,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 )
             }
         }
-        Log.d("putamadre", currencyList[0].name)
         meterBasesdedatos(currencyList)
         val listaaux = leerBasesdedatos()
         initRecycler(listaaux)
@@ -304,6 +304,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun meterBasesdedatos(lista : MutableList<Currency>){
         Log.d("olv", lista[0].name)
         val db = dbHelper.writableDatabase
+        dbHelper.check(db)
         for(i in 0..7){
 
 
