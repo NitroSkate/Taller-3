@@ -66,6 +66,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
+            var actualizar = leerBasesdedatos()
+            initRecycler(actualizar)
         }
 
 
@@ -147,36 +149,46 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     // TODO (14.2) Funcion que recibe el ID del elemento tocado
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        var listap : ArrayList<Currency>
         // Handle navigation view item clicks here.
         when (item.itemId) {
             // TODO (14.3) Los Id solo los que estan escritos en el archivo de MENU
             R.id.nav_camera -> {
                 Toast.makeText(this, item.title, Toast.LENGTH_SHORT).show()
-
+                listap = leerBasesdedatosUno(item.title.toString(),2)
+                Log.d("sivar", listap[1].name)
+                initRecycler(listap)
             }
             R.id.nav_gallery -> {
-                QueryPokemonTask().execute(item.title.toString())
                 Toast.makeText(this, item.title, Toast.LENGTH_SHORT).show()
+                listap = leerBasesdedatosUno(item.title.toString(),2)
+                initRecycler(listap)
+
             }
             R.id.nav_slideshow -> {
-                QueryPokemonTask().execute(item.title.toString())
                 Toast.makeText(this, item.title, Toast.LENGTH_SHORT).show()
+                listap = leerBasesdedatosUno(item.title.toString(),2)
+                initRecycler(listap)
             }
             R.id.nav_manage -> {
-                QueryPokemonTask().execute(item.title.toString())
                 Toast.makeText(this, item.title, Toast.LENGTH_SHORT).show()
+                listap = leerBasesdedatosUno(item.title.toString(),2)
+                initRecycler(listap)
             }
             R.id.nav_share -> {
-                QueryPokemonTask().execute(item.title.toString())
                 Toast.makeText(this, item.title, Toast.LENGTH_SHORT).show()
+                listap = leerBasesdedatosUno(item.title.toString(),2)
+                initRecycler(listap)
             }
             R.id.nav_send -> {
-                QueryPokemonTask().execute(item.title.toString())
                 Toast.makeText(this, item.title, Toast.LENGTH_SHORT).show()
+                listap = leerBasesdedatosUno(item.title.toString(),2)
+                initRecycler(listap)
             }
             R.id.guatemala -> {
-                QueryPokemonTask().execute(item.title.toString())
                 Toast.makeText(this, item.title, Toast.LENGTH_SHORT).show()
+                listap = leerBasesdedatosUno(item.title.toString(),2)
+                initRecycler(listap)
             }
         }
 
@@ -198,7 +210,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun pokemonItemClicked(item: Currency) {
         val listab = Bundle()
-        val lista = leerBasesdedatosUno(item.name)
+        val lista = leerBasesdedatosUno(item.name, 1)
         Log.d("olv", lista[0].name)
         listab.putParcelableArrayList("Coins", lista)
         if (twoPane){
@@ -384,10 +396,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return lista
     }
 
-    private fun leerBasesdedatosUno(oof : String) : ArrayList<Currency>{
+    private fun leerBasesdedatosUno(oof : String, num : Int) : ArrayList<Currency>{
         // TODO(13) Para obtener los datos almacenados, es necesario solicitar una instancia de lectura de la base de datos.
         val db = dbHelper.readableDatabase
-
+        //Log.d("KPAZA", oof)
         val projection = arrayOf(
             BaseColumns._ID,
             DatabaseContract.PersonaEntry.COLUMN_NAME,
@@ -399,46 +411,88 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             DatabaseContract.PersonaEntry.COLUMN_ISAVAILABLE,
             DatabaseContract.PersonaEntry.COLUMN_IMG
         )
-
-        //val sortOrder = "${DatabaseContract.PersonaEntry.COLUMN_DISPLAYNAME} DESC"
-
-        val where = "${DatabaseContract.PersonaEntry.COLUMN_NAME}=?"
-
-        val wherev = arrayOf(
-            oof
-        )
-
-
-        val cursor = db.query(
-            DatabaseContract.PersonaEntry.TABLE_NAME, // nombre de la tabla
-            projection, // columnas que se devolverán
-            where, // Columns where clausule
-            wherev, // values Where clausule
-            null, // Do not group rows
-            null, // do not filter by row
-            null // sort order
-        )
-
         var lista = ArrayList<Currency>()
 
-        with(cursor) {
-            while (moveToNext()) {
-                var moneda = Currency(
-                    "N/A",
-                    getString(getColumnIndexOrThrow(DatabaseContract.PersonaEntry.COLUMN_NAME)),
-                    getString(getColumnIndexOrThrow(DatabaseContract.PersonaEntry.COLUMN_COUNTRY)),
-                    getString(getColumnIndexOrThrow(DatabaseContract.PersonaEntry.COLUMN_VALUE)),
-                    getString(getColumnIndexOrThrow(DatabaseContract.PersonaEntry.COLUMN_VALUE_US)),
-                    getString(getColumnIndexOrThrow(DatabaseContract.PersonaEntry.COLUMN_YEAR)),
-                    getString(getColumnIndexOrThrow(DatabaseContract.PersonaEntry.COLUMN_REVIEW)),
-                    getString(getColumnIndexOrThrow(DatabaseContract.PersonaEntry.COLUMN_ISAVAILABLE)),
-                    getString(getColumnIndexOrThrow(DatabaseContract.PersonaEntry.COLUMN_IMG))
-                )
+        //val sortOrder = "${DatabaseContract.PersonaEntry.COLUMN_DISPLAYNAME} DESC"
+        if(num ==1) {
+            val where = "${DatabaseContract.PersonaEntry.COLUMN_NAME}=?"
 
-                lista.add(moneda)
+            val wherev = arrayOf(
+                oof
+            )
+
+
+            val cursor = db.query(
+                DatabaseContract.PersonaEntry.TABLE_NAME, // nombre de la tabla
+                projection, // columnas que se devolverán
+                where, // Columns where clausule
+                wherev, // values Where clausule
+                null, // Do not group rows
+                null, // do not filter by row
+                null // sort order
+            )
+
+            //var lista = ArrayList<Currency>()
+
+            with(cursor) {
+                while (moveToNext()) {
+                    var moneda = Currency(
+                        "N/A",
+                        getString(getColumnIndexOrThrow(DatabaseContract.PersonaEntry.COLUMN_NAME)),
+                        getString(getColumnIndexOrThrow(DatabaseContract.PersonaEntry.COLUMN_COUNTRY)),
+                        getString(getColumnIndexOrThrow(DatabaseContract.PersonaEntry.COLUMN_VALUE)),
+                        getString(getColumnIndexOrThrow(DatabaseContract.PersonaEntry.COLUMN_VALUE_US)),
+                        getString(getColumnIndexOrThrow(DatabaseContract.PersonaEntry.COLUMN_YEAR)),
+                        getString(getColumnIndexOrThrow(DatabaseContract.PersonaEntry.COLUMN_REVIEW)),
+                        getString(getColumnIndexOrThrow(DatabaseContract.PersonaEntry.COLUMN_ISAVAILABLE)),
+                        getString(getColumnIndexOrThrow(DatabaseContract.PersonaEntry.COLUMN_IMG))
+                    )
+
+                    lista.add(moneda)
+                }
             }
+            //Log.d("KPASA", lista[0].name)
+
         }
 
+        if(num == 2){
+            val where = "${DatabaseContract.PersonaEntry.COLUMN_COUNTRY}=?"
+
+            val wherev = arrayOf(
+                oof
+            )
+
+
+            val cursor = db.query(
+                DatabaseContract.PersonaEntry.TABLE_NAME, // nombre de la tabla
+                projection, // columnas que se devolverán
+                where, // Columns where clausule
+                wherev, // values Where clausule
+                null, // Do not group rows
+                null, // do not filter by row
+                null // sort order
+            )
+
+            //var lista = ArrayList<Currency>()
+
+            with(cursor) {
+                while (moveToNext()) {
+                    var moneda = Currency(
+                        "N/A",
+                        getString(getColumnIndexOrThrow(DatabaseContract.PersonaEntry.COLUMN_NAME)),
+                        getString(getColumnIndexOrThrow(DatabaseContract.PersonaEntry.COLUMN_COUNTRY)),
+                        getString(getColumnIndexOrThrow(DatabaseContract.PersonaEntry.COLUMN_VALUE)),
+                        getString(getColumnIndexOrThrow(DatabaseContract.PersonaEntry.COLUMN_VALUE_US)),
+                        getString(getColumnIndexOrThrow(DatabaseContract.PersonaEntry.COLUMN_YEAR)),
+                        getString(getColumnIndexOrThrow(DatabaseContract.PersonaEntry.COLUMN_REVIEW)),
+                        getString(getColumnIndexOrThrow(DatabaseContract.PersonaEntry.COLUMN_ISAVAILABLE)),
+                        getString(getColumnIndexOrThrow(DatabaseContract.PersonaEntry.COLUMN_IMG))
+                    )
+
+                    lista.add(moneda)
+                }
+            }
+        }
         return lista
     }
 
