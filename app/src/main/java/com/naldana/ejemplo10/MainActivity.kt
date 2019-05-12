@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         // TODO (10) Click Listener para el boton flotante
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+            Snackbar.make(view, "Lista actualizado", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
             var actualizar = leerBasesdedatos()
             initRecycler(actualizar)
@@ -215,7 +215,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         listab.putParcelableArrayList("Coins", lista)
         if (twoPane){
 
-            mainContentFragment = CurrencyFragment.newInstance(lista)
+            mainContentFragment = CurrencyFragment.newInstance(item)
             changeFragment(R.id.fragment_content, mainContentFragment)
 
         }else{
@@ -316,7 +316,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun meterBasesdedatos(lista : MutableList<Currency>){
         Log.d("olv", lista[0].name)
         val db = dbHelper.writableDatabase
-        dbHelper.check(db)
+        dbHelper. check(db)
         for(i in 0..7){
 
 
@@ -338,7 +338,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             if (newRowId == -1L) {
                 Toast.makeText(this, "No se ha podido guardar", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Guardado con exito", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this, "Guardado con exito", Toast.LENGTH_SHORT).show()
+                Log.d("Hola", "Guardado con exito")
             }
 
         }
